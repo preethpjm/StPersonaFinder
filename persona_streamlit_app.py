@@ -131,11 +131,11 @@ For each MBTI dimension show the dominant side of each of the 4 pairs, along wit
 Format the output like this (example values):
 52% Introverted, 25% Intuitive, 90% Feeling, 65% Perceiving
 - Goals and needs
-- Age
-- Occupation
-- Marital Status
-- Location
-- Archetype
+- Age (just a number or range, no reasoning. e.g., 18 or "20s" or Uknown if not determined)
+- Occupation (just the job title, no reasoning. e.g., "Software Engineer" or Uknown if not determined)
+- Marital Status (one of: Single, Married, Unknown — no explanation)
+- Location (only the place name, no reasoning.)
+- Archetype (just the archetype title, no reasoning. e.g., "The Explorer" adn if required 50 to 100 charecters on what tht means)
 - Generate a short quote (less than 140 characters)
 
 Text:
