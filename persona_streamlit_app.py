@@ -130,13 +130,14 @@ Given the following Reddit posts and comments from a user, infer:
 For each MBTI dimension show the dominant side of each of the 4 pairs, along with how strongly the person leans toward that side.
 Format the output like this (example values):
 52% Introverted, 25% Intuitive, 90% Feeling, 65% Perceiving
+(Note: A lower percentage in a trait implies the person leans toward the opposite. For example, 25% Intuitive = 75% Sensing.)
 - Goals and needs
-- Age (just a number or range, no reasoning. example 18 or "20s" or Uknown if not determined)
-- Occupation (just the job title, no reasoning. example "Software Engineer" or Uknown if not determined)
-- Marital Status (one of: Single, Married, Unknown — no explanation)
-- Location (only the place name, no reasoning.)
-- Archetype (just the archetype title, no reasoning. example "The Explorer")
-- Generate a short quote (less than 140 characters)
+- Age (just a number or range not the resoning for it, example: 18 or 20s)
+- Occupation
+- Marital Status (Come to a conclusion be it : Single/ Married/ Unknown. one of the three)
+- Location (if implied, mention only one)
+- Archetype (based on MBTI or tone. just the Archetype, ommit the reasoning. example: Explorer)
+- Generate a short quote that best represents this user (less than 140 characters and just the quote)
 
 Text:
 {all_text}
@@ -153,8 +154,9 @@ Respond clearly under each heading using bullet points. Use exactly these headin
 **Location:**
 **Archetype:**
 **Short quote:**
-"""
 
+Each section must be present, even if minimal data exists. Do not skip or rename any heading. Do not include markdown bullets or formatting in the values.
+"""
     llm_response = query_llm(prompt)
     parsed_data = parse_llm_response(llm_response)
     parsed_data["name"] = username
