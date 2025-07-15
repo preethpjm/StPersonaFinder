@@ -49,37 +49,38 @@ def extract_section(text, header):
     match = re.search(pattern, text, re.DOTALL)
     return match.group(1).strip() if match else ""
 
-def extract_bullet_list(section_text):
-    lines = section_text.splitlines()
-    return [line.strip("•- ").strip() for line in lines if line.strip()]
+    def extract_bullet_list(section_text):
+        lines = section_text.splitlines()
+        return [line.strip("•- ").strip() for line in lines if line.strip()]
 
-def extract_key_value_pairs(section_text):
-    items = []
-    for line in section_text.splitlines():
-        line = line.strip("•- ").strip()
-        if "(" in line and ")" in line:
-            parts = line.rsplit("(", 1)
-            items.append((parts[0].strip(), parts[1].strip(")")))
-        else:
-            items.append((line, ""))
-    return items
+    def extract_key_value_pairs(section_text):
+        items = []
+        for line in section_text.splitlines():
+            line = line.strip("•- ").strip()
+            if "(" in line and ")" in line:
+                parts = line.rsplit("(", 1)
+                items.append((parts[0].strip(), parts[1].strip(")")))
+            else:
+                items.append((line, ""))
+        return items
 
-def parse_llm_response(response_text):
-    parsed = {
-        "motivations": extract_key_value_pairs(extract_section(response_text, "Motivations")),
-        "frustrations": extract_key_value_pairs(extract_section(response_text, "Frustrations")),
-        "behaviors": extract_key_value_pairs(extract_section(response_text, "Behavioral habits")),
-        "goals": extract_bullet_list(extract_section(response_text, "Goals and needs")),
-        "quote": extract_section(response_text, "Short quote").strip('"'),
-        "age": extract_section(response_text, "Age"),
-        "occupation": extract_section(response_text, "Occupation"),
-        "status": extract_section(response_text, "Status"),
-        "location": extract_section(response_text, "Location"),
-        "archetype": extract_section(response_text, "Archetype"),
-    }
+    parsed = {}
 
-    personality_line = extract_section(response_text, "Personality")
+    parsed["motivations"] = extract_key_value_pairs(extract_section("Motivations"))
+    parsed["frustrations"] = extract_key_value_pairs(extract_section("Frustrations"))
+    parsed["behaviors"] = extract_key_value_pairs(extract_section("Behavioral habits"))
+    parsed["goals"] = extract_bullet_list(extract_section("Goals and needs"))
+    parsed["quote"] = extract_section("Short quote").strip('"')
+
+    # Personality example: "52% Introverted, 25% Intuitive, 90% Feeling, 65% Perceiving"
+    personality_line = extract_section("Personality")
     parsed["personality_bars"] = generate_personality_bars(personality_line)
+    parsed["age"] = extract_section("Age")
+    parsed["occupation"] = extract_section("Occupation")
+    parsed["status"] = extract_section("Status")
+    parsed["location"] = extract_section("Location")
+    parsed["archetype"] = extract_section("Archetype")
+
     return parsed
 
 def generate_personality_bars(personality_text):
@@ -106,6 +107,8 @@ def generate_personality_bars(personality_text):
         bar("Perceiving", "Judging"),
     ]
 
+
+
 def build_persona(username):
     redditor = reddit.redditor(username)
     posts = []
@@ -114,11 +117,14 @@ def build_persona(username):
         posts = [sub.title + " " + sub.selftext for sub in redditor.submissions.new(limit=20)]
         comments = [c.body for c in redditor.comments.new(limit=50)]
     except Exception as e:
-        return None, f"Error accessing user data: {e}"
+        print(f"Error accessing user data for {username}: {e}")
+        return
 
     all_text = "\n".join(posts + comments)
     if not all_text.strip():
-        return None, "No data found for user."
+        print(f"No data found for user '{username}'. Cannot build persona.")
+        return
+
 
     prompt = f"""
 Given the following Reddit posts and comments from a user, infer:
