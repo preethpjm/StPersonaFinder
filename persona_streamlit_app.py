@@ -44,10 +44,11 @@ def query_llm(prompt):
     except Exception as e:
         return f"[Error querying LLM: {str(e)}]"
 
-def extract_section(text, header):
-    pattern = rf"\*\*{re.escape(header)}:\*\*\s*(.*?)(?=\n\*\*|$)"
-    match = re.search(pattern, text, re.DOTALL)
-    return match.group(1).strip() if match else ""
+def parse_llm_response(response_text):
+    def extract_section(header):
+        pattern = rf"\*\*{re.escape(header)}:\*\*\s*(.*?)(?=\n\*\*|$)"
+        match = re.search(pattern, response_text, re.DOTALL)
+        return match.group(1).strip() if match else ""
 
     def extract_bullet_list(section_text):
         lines = section_text.splitlines()
