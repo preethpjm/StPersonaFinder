@@ -135,7 +135,7 @@ Format the output like this (example values):
 - Occupation (just the job title, no reasoning. e.g., "Software Engineer" or Uknown if not determined)
 - Marital Status (one of: Single, Married, Unknown — no explanation)
 - Location (only the place name, no reasoning.)
-- Archetype (just the archetype title, no reasoning. e.g., "The Explorer" adn if required 50 to 100 charecters on what tht means)
+- Archetype (just the archetype title, no reasoning. e.g., "The Explorer" and if required at max 50 charecters one line on what that means)
 - Generate a short quote (less than 140 characters)
 
 Text:
